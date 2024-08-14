@@ -1,6 +1,5 @@
 # Copyright (c) 2023, Oracle and/or its affiliates.
 # Licensed under the Universal Permissive License v1.0 as shown at https://oss.oracle.com/licenses/upl.
-
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -19,7 +18,7 @@ spec:
       annotations:
         checksum/metrics-configmap: {{ include (print $.Template.BasePath "/metrics-configmap.yaml") . | sha256sum }}
         checksum/agent-configmap: {{ include (print $.Template.BasePath "/agent-configmap.yaml") . | sha256sum }}
-        checksum/env-configmap: {{ include (print $.Template.BasePath "/env-configmap.yaml") . | sha256sum }}
+        checksum/mgmtagentenv-configmap: {{ include (print $.Template.BasePath "/mgmtagentenv-configmap.yaml") . | sha256sum }}
       labels:
         app: {{ include "mgmt-agent.resourceNamePrefix" . }}-mgmt-agent
     spec:
@@ -32,13 +31,12 @@ spec:
       imagePullSecrets:
         - name: {{ include "mgmt-agent.resourceNamePrefix" . }}-mgmt-agent-container-registry-key
       {{- end }}
-      restartPolicy: Always
       containers:
         - name: {{ include "mgmt-agent.resourceNamePrefix" . }}-mgmt-agent
           image: {{ .Values.mgmtagent.image.url }}
           envFrom:
           - configMapRef:
-              name: {{ include "mgmt-agent.resourceNamePrefix" . }}-env
+              name: {{ include "mgmt-agent.resourceNamePrefix" . }}-agentenv
           resources:
             requests:
               cpu: {{ .Values.deployment.resource.request.cpuCore }}
@@ -49,7 +47,6 @@ spec:
           volumeMounts:
             - name: mgmtagent-secret
               mountPath: /opt/oracle/mgmtagent_secret
-              readOnly: true
             - name: mgmtagent-pvc
               mountPath: /opt/oracle
             - name: mgmtagent-config
@@ -72,7 +69,7 @@ spec:
             name: {{ include "mgmt-agent.resourceNamePrefix" . }}-metrics
         - name: mgmtagent-env
           configMap:
-            name: {{ include "mgmt-agent.resourceNamePrefix" . }}-env
+            name: {{ include "mgmt-agent.resourceNamePrefix" . }}-agentenv
         - name: mgmtagent-agent-config
           configMap:
             name: {{ include "mgmt-agent.resourceNamePrefix" . }}-agent

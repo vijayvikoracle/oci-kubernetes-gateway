@@ -9,9 +9,10 @@ global:
   # -- OKE OCID for an OKE cluster or an unique ID for other Kubernetes clusters.
   kubernetesClusterID:
   # -- Provide a unique name for the cluster. This would help uniquely identifying the logs and metrics data at OCI Logging Analytics and OCI Monitoring respectivelt, when moitoring multiple clustersa
-  kubernetesClusterName:
+  kubernetesClusterName: k8s_test_19apr
 
 oci-onm-common:
+  enabled: false
   # -- By default, a cluster role, cluster role binding and serviceaccount will be created for the monitoring pods to be able to (readonly) access various objects within the cluster, to support collection of various telemetry data. You may set this to false and provide your own serviceaccount which has the necessary cluster role(s) binded to it. Refer, README for the cluster role definition and other details.
   createServiceAccount: true
   # -- If createNamespace is set to true, it tries to create the namespace defined in 'namespace' variable.
@@ -24,6 +25,7 @@ oci-onm-common:
   serviceAccount: "{{ .Values.global.resourceNamePrefix }}"
 
 oci-onm-logan:
+  enabled: false
   oci-onm-common:
     enabled: false
   namespace: "{{ .Values.global.namespace }}"
@@ -48,10 +50,34 @@ oci-onm-mgmt-agent:
     name: "{{ .Values.global.kubernetesClusterName }}"
   mgmtagent:
     # Provide the base64 encoded content of the Management Agent Install Key file (e.g. cat input.rsp | base64 -w 0)
-    installKeyFileContent:
+    installKeyFileContent: bWFuYWdlbWVudEFnZW50SW5zdGFsbEtleSA9IE1pNHdMSFZ6TFdGemFHSjFjbTR0TVN4dlkybGtNUzUwWlc1aGJtTjVMbTlqTVM0dVlXRmhZV0ZoWVdFMU5XTnVNM2x0Tkc1MGVuTTBiV2t6TjJWMVpUVnVZbm8zYUdKNVpYVnllbkIyYkRVM2VtcDNlV1Z3Ym5KaE5EZGtNM0J4TEc5amFXUXhMbTFoYm1GblpXMWxiblJoWjJWdWRHbHVjM1JoYkd4clpYa3ViMk14TG1saFpDNWhiV0ZoWVdGaFlYcHpORFIwZVhsaGJHc3pibTkwYkhad00zZDFjbWMxZFdrM2NuTndkM3BvWkRaNU5ITjFZbkExTW1oNVlUVnVaemMzYjJFc1NYaHdaMGhNVTNCdFNsRnpRME53UWtRM01EUkxSR293WDBKR2VVcDNZM1ExYUVWWFYwaFBOdz09IApDcmVkZW50aWFsV2FsbGV0UGFzc3dvcmQgPQpkaXNhYmxlRmlwcyA9IHRydWUKR2F0ZXdheVNlcnZlckhvc3Q9aG9zdC0xMC0wLTIwLTE4Ni5sYnN1YmUzNzkzODdmNi5tYW5hZ2VtZW50Z2F0ZXcub3JhY2xldmNuLmNvbQpHYXRld2F5U2VydmVyUG9ydD00NDgwCkJ1ZmZlcmluZ0VuYWJsZWQ9dHJ1ZQoK
     # Follow steps documented at https://github.com/oracle/docker-images/tree/main/OracleManagementAgent to build docker image.
     image:
       # Replace this value with actual docker image URL for Management Agent
-      url: container-registry.oracle.com/oci_observability_management/oci-management-agent:1.4.0
+      #url: iad.ocir.io/idhybdxllr8w/mgmtagent-container:1.0.3499
+      url: iad.ocir.io/paasomcqa/mgmtagent-container:1.0.4
+      #url: container-registry.oracle.com/oci_observability_management/oci-management-agent:1.4.0
       # Image secrets to use for pulling container image (base64 encoded content of ~/.docker/config.json file)
-      secret:
+      secret: ewogICAgICAgICJhdXRocyI6IHsKICAgICAgICAgICAgICAgICJpYWQub2Npci5pbyI6IHsKICAgICAgICAgICAgICAgICAgICAgICAgImF1dGgiOiAiY0dGaGMyOXRZM0ZoTDA5eVlXTnNaVWxrWlc1MGFYUjVRMnh2ZFdSVFpYSjJhV05sTDNacGFtRjVMbkV1YTNWdFlYSkFiM0poWTJ4bExtTnZiVHA5UlV0TU16ZHdOSFJ5VG5sb2MxMUhXa1ZIUkE9PSIKICAgICAgICAgICAgICAgIH0KICAgICAgICB9Cn0K
+
+oci-onm-mgmt-gateway:
+  enabled: false
+  oci-onm-common:
+    enabled: false
+  namespace: "{{ .Values.global.namespace }}"
+  serviceAccount: "{{ .Values.global.resourceNamePrefix }}"
+  kubernetesCluster:
+    name: "{{ .Values.global.kubernetesClusterName }}"
+  mgmtgateway:
+    # Provide the base64 encoded content of the Management Agent Install Key file (e.g. cat input.rsp | base64 -w 0)
+    installKeyFileContent: I21hbmFnZW1lbnRBZ2VudEluc3RhbGxLZXk9TWk0d0xIVnpMV0Z6YUdKMWNtNHRNU3h2WTJsa01TNTBaVzVoYm1ONUxtOWpNUzR1WVdGaFlXRmhZV0UxTldOdU0zbHRORzUwZW5NMGJXa3pOMlYxWlRWdVlubzNhR0o1WlhWeWVuQjJiRFUzZW1wM2VXVndibkpoTkRka00zQnhMRzlqYVdReExtMWhibUZuWlcxbGJuUmhaMlZ1ZEdsdWMzUmhiR3hyWlhrdWIyTXhMbWxoWkM1aGJXRmhZV0ZoWVhwek5EUjBlWGxoZG1zM05IcHVOM28yY25kM2RUSnhOV2w1ZWpadWVXeHFOWGx3ZUhCcU1uTjNNbmRwZVRRMmJXeGxhbkVzU1hKWWEydzFOR05mUmtWdWNHMHlObXN3WlhWTVNrMUtjVGw2T1hoNk5sOUtRWFV6Um00NFRnPT0KbWFuYWdlbWVudEFnZW50SW5zdGFsbEtleT1NaTR3TEhWekxXRnphR0oxY200dE1TeHZZMmxrTVM1MFpXNWhibU41TG05ak1TNHVZV0ZoWVdGaFlXRTFOV051TTNsdE5HNTBlbk0wYldrek4yVjFaVFZ1WW5vM2FHSjVaWFZ5ZW5CMmJEVTNlbXAzZVdWd2JuSmhORGRrTTNCeExHOWphV1F4TG0xaGJtRm5aVzFsYm5SaFoyVnVkR2x1YzNSaGJHeHJaWGt1YjJNeExtbGhaQzVoYldGaFlXRmhZWHB6TkRSMGVYbGhjR2xvYm5WMVkyNTJhVE0xTm01c1p6TnBiM0Z1YTNoM2R6TnBhWGcyYmpKck1uUnViRE0zTjJscWNXRXNTVlpUUkUxNlRVVkxaRlpuWDBVMmVuSlZlREJhT1VoNmEyMUxPVUZSYmtOd1dqRkdVVmRHYWc9PQojbWFuYWdlZEFnZW50VXJsPSBodHRwczovL21hbmFnZW1lbnQtYWdlbnQtZGV2LnVzLWFzaGJ1cm4tMS5vY2kub2MtdGVzdC5jb20KI0dhdGV3YXlVc2VybmFtZT1vcmFjbGUyCiNHYXRld2F5UGFzc3dvcmQ9d2VsY29tZTIkJAojbWFuYWdlbWVudEFnZW50SW5zdGFsbEtleT1NaTR3TEhWekxXRnphR0oxY200dE1TeHZZMmxrTVM1MFpXNWhibU41TG05ak1TNHVZV0ZoWVdGaFlXRTFOV051TTNsdE5HNTBlbk0wYldrek4yVjFaVFZ1WW5vM2FHSjVaWFZ5ZW5CMmJEVTNlbXAzZVdWd2JuSmhORGRrTTNCeExHOWphV1F4TG0xaGJtRm5aVzFsYm5SaFoyVnVkR2x1YzNSaGJHeHJaWGt1YjJNeExtbGhaQzVoYldGaFlXRmhZWHB6TkRSMGVYbGhkbXMzTkhwdU4zbzJjbmQzZFRKeE5XbDVlalp1ZVd4cU5YbHdlSEJxTW5OM01uZHBlVFEyYld4bGFuRXNTWEpZYTJ3MU5HTmZSa1Z1Y0cweU5tc3daWFZNU2sxS2NUbDZPWGg2Tmw5S1FYVXpSbTQ0VGc9PQojR2F0ZXdheUNlcnRPY2lkPW9jaWQxLmNlcnRpZmljYXRlLm9jMS5pYWQuYW1hYWFhYWF6czQ0dHl5YTNkNGhmZ3c3cGZ0YWh5Z2UzampxN2plNnR3dzU0Z240dHNsZGRubGc3NDdxCkdhdGV3YXlDZXJ0Q29tbW9uTmFtZT0qLm9jaS1vbm0tbWdtdC1nYXRld2F5Lm9jaS1vbm0uc3ZjLmNsdXN0ZXIubG9jYWwK
+    # Follow steps documented at https://github.com/oracle/docker-images/tree/main/OracleManagementAgent to build docker image.
+    image:
+      # Replace this value with actual docker image URL for Management Agent
+      #url: iad.ocir.io/idhybdxllr8w/mgmtagent-container:1.0.3499
+      url: iad.ocir.io/paasomcqa/mgmtgateway-container:1.0.318
+      #url: container-registry.oracle.com/oci_observability_management/oci-management-agent:1.4.0
+      # Image secrets to use for pulling container image (base64 encoded content of ~/.docker/config.json file)
+      secret: ewogICAgICAgICJhdXRocyI6IHsKICAgICAgICAgICAgICAgICJpYWQub2Npci5pbyI6IHsKICAgICAgICAgICAgICAgICAgICAgICAgImF1dGgiOiAiY0dGaGMyOXRZM0ZoTDA5eVlXTnNaVWxrWlc1MGFYUjVRMnh2ZFdSVFpYSjJhV05sTDNacGFtRjVMbkV1YTNWdFlYSkFiM0poWTJ4bExtTnZiVHA5UlV0TU16ZHdOSFJ5VG5sb2MxMUhXa1ZIUkE9PSIKICAgICAgICAgICAgICAgIH0KICAgICAgICB9Cn0K
+    externalPort: 4480
+    internalPort: 4480

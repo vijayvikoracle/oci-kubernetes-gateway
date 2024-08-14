@@ -11,7 +11,7 @@
 {{- end -}}
 
 # Prefix for all resources created using this chart.
-{{- define "mgmt-agent.resourceNamePrefix" -}}
+{{- define "mgmt-gateway.resourceNamePrefix" -}}
   {{- if .Values.resourceNamePrefix -}}
     {{ include "common.tplvalues.render" ( dict "value" .Values.resourceNamePrefix "context" .) | trunc 63 | trimSuffix "-" }}
   {{- else -}}
@@ -20,7 +20,7 @@
 {{- end -}}
 
 # namespace
-{{- define "mgmt-agent.namespace" -}}
+{{- define "mgmt-gateway.namespace" -}}
   {{- if .Values.namespace -}}
     {{ include "common.tplvalues.render" ( dict "value" .Values.namespace "context" .) }}
   {{- else -}}
@@ -29,19 +29,18 @@
 {{- end -}}
 
 #serviceAccount
-{{- define "mgmt-agent.serviceAccount" -}}
+{{- define "mgmt-gateway.serviceAccount" -}}
   {{ include "common.tplvalues.render" ( dict "value" .Values.serviceAccount "context" .) }}
 {{- end -}}
 
 #kubernetesClusterName
-{{- define "mgmt-agent.kubernetesClusterName" -}}
+{{- define "mgmt-gateway.kubernetesClusterName" -}}
   {{- if .Values.kubernetesCluster.name -}}
     {{ include "common.tplvalues.render" ( dict "value" .Values.kubernetesCluster.name "context" .) }}
   {{- else -}}
     {{- "UNDEFINED" -}}
   {{- end -}}
 {{- end -}}
-
 #mgmtgateway name
 {{- define "mgmt-gateway.gatewayFullname" -}}
 {{- .Release.Name | printf "%s-gateway" | trunc 63 | trimSuffix "-" -}}

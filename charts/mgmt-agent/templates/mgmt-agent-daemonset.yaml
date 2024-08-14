@@ -18,7 +18,7 @@ spec:
       annotations:
         checksum/metrics-configmap: {{ include (print $.Template.BasePath "/metrics-configmap.yaml") . | sha256sum }}
         checksum/agent-configmap: {{ include (print $.Template.BasePath "/agent-configmap.yaml") . | sha256sum }}
-        checksum/env-configmap: {{ include (print $.Template.BasePath "/env-configmap.yaml") . | sha256sum }}
+        checksum/mgmtagentenv-configmap: {{ include (print $.Template.BasePath "/mgmtagentenv-configmap.yaml") . | sha256sum }}
       labels:
         app: {{ include "mgmt-agent.resourceNamePrefix" . }}-mgmt-agent
     spec:
