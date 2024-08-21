@@ -9,7 +9,6 @@ Helm chart for collecting Kubernetes logs & objects and metrics using Fluentd an
 | Repository | Name | Version |
 |------------|------|---------|
 | file://../common | oci-onm-common | 3.0.0 |
-| file://../logan | oci-onm-logan | 3.0.0 |
 | file://../mgmt-agent | oci-onm-mgmt-agent | 3.0.0 |
 
 ## Values
@@ -25,14 +24,6 @@ Helm chart for collecting Kubernetes logs & objects and metrics using Fluentd an
 | oci-onm-common.namespace | string | `"{{ .Values.global.namespace }}"` | Kubernetes Namespace in which the serviceaccount to be created. |
 | oci-onm-common.resourceNamePrefix | string | `"{{ .Values.global.resourceNamePrefix }}"` | Prefix to be attached to resources created through this chart. Not all resources may have this prefix. |
 | oci-onm-common.serviceAccount | string | `"{{ .Values.global.resourceNamePrefix }}"` | Name of the Kubernetes ServiceAccount |
-| oci-onm-logan.image.url | string | `"container-registry.oracle.com/oci_observability_management/oci-la-fluentd-collector:1.1.0"` |  |
-| oci-onm-logan.kubernetesClusterID | string | `"{{ .Values.global.kubernetesClusterID }}"` |  |
-| oci-onm-logan.kubernetesClusterName | string | `"{{ .Values.global.kubernetesClusterName }}"` |  |
-| oci-onm-logan.namespace | string | `"{{ .Values.global.namespace }}"` |  |
-| oci-onm-logan.oci-onm-common.enabled | bool | `false` |  |
-| oci-onm-logan.ociLALogGroupID | string | `nil` |  |
-| oci-onm-logan.ociLANamespace | string | `nil` |  |
-| oci-onm-logan.serviceAccount | string | `"{{ .Values.global.resourceNamePrefix }}"` |  |
 | oci-onm-mgmt-agent.kubernetesCluster.name | string | `"{{ .Values.global.kubernetesClusterName }}"` |  |
 | oci-onm-mgmt-agent.mgmtagent.image.secret | string | `nil` |  |
 | oci-onm-mgmt-agent.mgmtagent.image.url | string | `"container-registry.oracle.com/oci_observability_management/oci-management-agent:1.3.0"` |  |
