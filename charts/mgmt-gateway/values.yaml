@@ -25,7 +25,7 @@ oci-onm-common:
 mgmtgateway:
    # Provide either installKeyFileContent or installKey as an install key. If both provided then installKeyFileContent will take higher precedence.
    # -- Provide the base64 encoded content of the Management Agent Install Key file (e.g. cat input.rsp | base64 -w 0)
-  installKeyFileContent: bWFuYWdlbWVudEFnZW50SW5zdGFsbEtleT1NaTR3TEhWekxXRnphR0oxY200dE1TeHZZMmxrTVM1MFpXNWhibU41TG05ak1TNHVZV0ZoWVdGaFlXRTFOV051TTNsdE5HNTBlbk0wYldrek4yVjFaVFZ1WW5vM2FHSjVaWFZ5ZW5CMmJEVTNlbXAzZVdWd2JuSmhORGRrTTNCeExHOWphV1F4TG0xaGJtRm5aVzFsYm5SaFoyVnVkR2x1YzNSaGJHeHJaWGt1YjJNeExtbGhaQzVoYldGaFlXRmhZWHB6TkRSMGVYbGhjR2xvYm5WMVkyNTJhVE0xTm01c1p6TnBiM0Z1YTNoM2R6TnBhWGcyYmpKck1uUnViRE0zTjJscWNXRXNTVlpUUkUxNlRVVkxaRlpuWDBVMmVuSlZlREJhT1VoNmEyMUxPVUZSYmtOd1dqRkdVVmRHYWc9PQpHYXRld2F5Q2VydENvbW1vbk5hbWU9Ki5sYnN1YmUzNzkzODdmNi5tYW5hZ2VtZW50Z2F0ZXcub3JhY2xldmNuLmNvbQo=
+  installKeyFileContent: bWFuYWdlbWVudEFnZW50SW5zdGFsbEtleT1NaTR3TEhWekxXRnphR0oxY200dE1TeHZZMmxrTVM1MFpXNWhibU41TG05ak1TNHVZV0ZoWVdGaFlXRTFOV051TTNsdE5HNTBlbk0wYldrek4yVjFaVFZ1WW5vM2FHSjVaWFZ5ZW5CMmJEVTNlbXAzZVdWd2JuSmhORGRrTTNCeExHOWphV1F4TG0xaGJtRm5aVzFsYm5SaFoyVnVkR2x1YzNSaGJHeHJaWGt1YjJNeExtbGhaQzVoYldGaFlXRmhZWHB6TkRSMGVYbGhjR2xvYm5WMVkyNTJhVE0xTm01c1p6TnBiM0Z1YTNoM2R6TnBhWGcyYmpKck1uUnViRE0zTjJscWNXRXNTVlpUUkUxNlRVVkxaRlpuWDBVMmVuSlZlREJhT1VoNmEyMUxPVUZSYmtOd1dqRkdVVmRHYWc9PQpHYXRld2F5Q2VydENvbW1vbk5hbWU9Ki5sYnN1YjBhZjJiNGI2OS5tYW5hZ2VtZW50Z2F0ZXcub3JhY2xldmNuLmNvbQo=
   # -- Copy the downloaded Management Agent Install Key file under root helm directory as resources/input.rsp
   installKey: resources/input.rsp
   # Follow steps documented at https://github.com/oracle/docker-images/tree/main/OracleManagementAgent to build docker image.
@@ -44,26 +44,6 @@ namespace: "{{ .Values.global.namespace }}"
 
 # -- Name of the Kubernetes ServiceAccount
 serviceAccount: "{{ .Values.global.resourceNamePrefix }}"
-
-
-# Kubernetes Cluster details to monitor
-kubernetesCluster:
-   # -- OCI Compartment Id to push Kubernetes Monitoring metrics. If not specified default is same as Agent compartment
-   compartmentId:
-   # -- Kubernetes cluster name
-   name:
-   # -- Kubernetes cluster namespace(s) to monitor. This can be a comma-separated list of namespaces or '*' to monitor all the namespaces
-   namespace: '*'
-   # -- OCI namespace to push Kubernetes Monitoring metrics. The namespace should match the pattern '^[a-z][a-z0-9_]*[a-z0-9]$'. By default metrics will be pushed to 'mgmtagent_kubernetes_metrics'
-   monitoringNamespace:
-   # -- Provide the specific list of comma separated metric names for API server (/metrics) metrics to be collected.
-   overrideAllowMetricsAPIServer:
-   # -- Provide the specific list of comma separated metric names for agent computed metrics to be collected.
-   overrideAllowMetricsCluster:
-   # -- Provide the specific list of comma separated metric names for Kubelet (/api/v1/nodes/<node_name>/proxy/metrics) metrics to be collected.
-   overrideAllowMetricsKubelet:
-   # -- Provide the specific list of comma separated metric names for Node (/api/v1/nodes/<node_name>/proxy/metrics/resource, /api/v1/nodes/<node_name>/proxy/metrics/cadvisor) metrics to be collected.
-   overrideAllowMetricsNode:
 
 deployment:
    security:

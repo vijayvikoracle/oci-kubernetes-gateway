@@ -45,3 +45,4 @@
 {{- define "mgmt-gateway.gatewayFullname" -}}
 {{- .Release.Name | printf "%s-gateway" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
+

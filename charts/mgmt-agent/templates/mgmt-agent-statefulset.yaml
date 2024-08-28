@@ -16,7 +16,6 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/metrics-configmap: {{ include (print $.Template.BasePath "/metrics-configmap.yaml") . | sha256sum }}
         checksum/agent-configmap: {{ include (print $.Template.BasePath "/agent-configmap.yaml") . | sha256sum }}
         checksum/env-configmap: {{ include (print $.Template.BasePath "/env-configmap.yaml") . | sha256sum }}
       labels:
@@ -49,8 +48,6 @@ spec:
               mountPath: /opt/oracle/mgmtagent_secret
             - name: mgmtagent-pvc
               mountPath: /opt/oracle
-            - name: mgmtagent-config
-              mountPath: /opt/oracle/mgmtagent_config
             - name: mgmtagent-env
               mountPath: /opt/oracle/mgmtagent_env
             - name: mgmtagent-agent-config
@@ -64,9 +61,6 @@ spec:
         - name: mgmtagent-secret
           secret:
             secretName: {{ include "mgmt-agent.resourceNamePrefix" . }}-mgmt-agent-rsp
-        - name: mgmtagent-config
-          configMap:
-            name: {{ include "mgmt-agent.resourceNamePrefix" . }}-metrics
         - name: mgmtagent-env
           configMap:
             name: {{ include "mgmt-agent.resourceNamePrefix" . }}-agentenv

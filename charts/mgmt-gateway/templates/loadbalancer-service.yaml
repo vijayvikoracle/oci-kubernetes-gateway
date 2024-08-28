@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mgmt-gateway-loadbalancer
+  namespace: {{ include "mgmt-gateway.namespace" . }}
+spec:
+  type: LoadBalancer
+  selector:
+    app: {{ include "mgmt-gateway.resourceNamePrefix" . }}-mgmt-gateway
+  ports:
+    - protocol: TCP
+      port: 4480
+      targetPort: 4480
