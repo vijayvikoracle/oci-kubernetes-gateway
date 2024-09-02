@@ -21,7 +21,7 @@
                 "resourceNamePrefix"
             ]
         },
-        "mgmtagent":
+        "mgmtgateway":
         {
             "properties":
             {
@@ -62,6 +62,48 @@
                     [
                         "url"
                     ]
+                },
+                "serivce":
+                {
+                   "properties":
+                   {
+                        "type":
+                        {
+                             "type": "string"
+                        },
+                        "port":
+                        {  
+                             "type":
+                             [
+                                 "integer",
+                                 "null"
+                             ]
+                        }
+                   }
+                },
+                "externalPort":
+                {
+                    "type":
+                    [
+                        "integer",
+                        "null"
+                    ]
+                },
+                "internalPort":
+                {
+                    "type":
+                    [
+                        "integer",
+                        "null"
+                    ]
+                },
+                "hostname":
+                {
+                    "type":
+                    [
+                        "string",
+                        "null"
+                    ]
                 }
             },
             "anyOf":
@@ -98,6 +140,41 @@
         "namespace":
         {
             "type": "string"
+        },
+        "kubernetesCluster":
+        {
+            "properties":
+            {
+                "name":
+                {
+                    "type":
+                    [
+                        "string",
+                        "null"
+                    ]
+                },
+                "namespace":
+                {
+                    "type": "string"
+                },
+                "monitoringNamespace":
+                {
+                    "anyOf":
+                    [
+                        {
+                          "type": "string",
+                          "pattern": "^[a-z][a-z0-9_]*[a-z0-9]$"
+                        },
+                        {
+                          "type": "null"
+                        }
+                    ]
+                }
+            },
+            "required":
+            [
+                "namespace"
+            ]
         },
         "deployment":
         {
@@ -141,11 +218,7 @@
                         "null"
                     ]
                 },
-                "daemonSetDeployment":
-                {
-                    "type": "boolean"
-                },
-                "daemonSet":
+                "replicaSet":
                 {
                     "properties":
                     {
@@ -153,8 +226,7 @@
                         {
                             "type":
                             [
-                                "string",
-                                "null"
+                                "string"
                             ]
                         }
                     }
@@ -211,7 +283,6 @@
             },
             "required": 
             [
-                "daemonSetDeployment"
             ]
         }
     },

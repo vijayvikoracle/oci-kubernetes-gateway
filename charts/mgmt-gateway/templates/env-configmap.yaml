@@ -1,0 +1,15 @@
+# Copyright (c) 2024, Oracle and/or its affiliates.
+# Licensed under the Universal Permissive License v1.0 as shown at https://oss.oracle.com/licenses/upl.
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "mgmt-gateway.resourceNamePrefix" . }}-env
+  namespace: {{ include "mgmt-gateway.namespace" . }}
+data:
+  # Unmodifiable properties
+  HELM_DEPLOYMENT: "true"
+  INSTALL_NAMESPACE: "{{ include "mgmt-gateway.namespace" . }}"
+  {{- if .Values.deployment.cleanupEpochTime }}
+  POD_CLEANUP_ID: "{{ .Values.deployment.cleanupEpochTime }}"
+  {{- end }}

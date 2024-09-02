@@ -1,0 +1,79 @@
+# Copyright (c) 2023, Oracle and/or its affiliates.
+# Licensed under the Universal Permissive License v1.0 as shown at https://oss.oracle.com/licenses/upl.
+
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: {{ include "mgmt-gateway.resourceNamePrefix" . }}-mgmt-gateway
+  namespace: {{ include "mgmt-gateway.namespace" . }}
+  labels:
+    app: {{ include "mgmt-gateway.resourceNamePrefix" . }}-mgmt-gateway
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: {{ include "mgmt-gateway.resourceNamePrefix" . }}-mgmt-gateway
+  template:
+    metadata:
+      annotations:
+        checksum/gateway-configmap: {{ include (print $.Template.BasePath "/gateway-configmap.yaml") . | sha256sum }}
+        checksum/env-configmap: {{ include (print $.Template.BasePath "/env-configmap.yaml") . | sha256sum }}
+      labels:
+        app: {{ include "mgmt-gateway.resourceNamePrefix" . }}-mgmt-gateway
+    spec:
+      securityContext:
+        runAsUser: {{ default 0 .Values.deployment.security.runAsUser }}
+        runAsGroup: {{ default 0 .Values.deployment.security.runAsGroup }}
+        fsGroup: {{ default 0 .Values.deployment.security.fsGroup }}
+      serviceAccountName: {{ include "mgmt-gateway.serviceAccount" . }}
+      {{- if .Values.mgmtgateway.image.secret }}
+      ports:
+        - port: {{ .Values.mgmtgateway.externalPort }}
+          targetPort: {{ .Values.mgmtgateway.internalPort }} #8080
+      imagePullSecrets:
+        - name: {{ include "mgmt-gateway.resourceNamePrefix" . }}-mgmt-gateway-container-registry-key
+      {{- end }}
+      restartPolicy: Always
+      containers:
+        - name: {{ include "mgmt-gateway.resourceNamePrefix" . }}-mgmt-gateway
+          image: {{ .Values.mgmtgateway.image.url }}
+          envFrom:
+          - configMapRef:
+              name: {{ include "mgmt-gateway.resourceNamePrefix" . }}-env
+          resources:
+            requests:
+              cpu: {{ .Values.deployment.resource.request.cpuCore }}
+              memory: {{ .Values.deployment.resource.request.memory }}
+            limits:
+              cpu: {{ .Values.deployment.resource.limit.cpuCore }}
+              memory: {{ .Values.deployment.resource.limit.memory }}
+          volumeMounts:
+            - name: mgmtgateway-secret
+              mountPath: /opt/oracle/mgmtgateway_secret
+              readOnly: true
+            - name: mgmtgateway-hostpath
+              mountPath: /opt/oracle
+            - name: mgmtgateway-env
+              mountPath: /opt/oracle/mgmtgateway_env
+            - name: mgmtgateway-gateway-config
+              mountPath: /opt/oracle/mgmtgateway_gateway_config
+            - mountPath: /tmp
+              name: tmp
+          securityContext:
+           allowPrivilegeEscalation: false
+           readOnlyRootFilesystem: true
+      volumes:
+        - name: mgmtgateway-secret
+          secret:
+            secretName: {{ include "mgmt-gateway.resourceNamePrefix" . }}-mgmt-gateway-rsp
+        - name: mgmtgateway-env
+          configMap:
+            name: {{ include "mgmt-gateway.resourceNamePrefix" . }}-env
+        - name: mgmtgateway-gateway-config
+          configMap:
+            name: {{ include "mgmt-gateway.resourceNamePrefix" . }}-gateway
+        - name: mgmtgateway-hostpath
+          persistentVolumeClaim:
+            claimName: pvcgateway
+        - emptyDir: {}
+          name: tmp

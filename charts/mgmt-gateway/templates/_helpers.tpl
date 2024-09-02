@@ -1,4 +1,3 @@
-
 # Copyright (c) 2023, Oracle and/or its affiliates.
 # Licensed under the Universal Permissive License v1.0 as shown at https://oss.oracle.com/licenses/upl.
 
@@ -12,7 +11,7 @@
 {{- end -}}
 
 # Prefix for all resources created using this chart.
-{{- define "logan.resourceNamePrefix" -}}
+{{- define "mgmt-gateway.resourceNamePrefix" -}}
   {{- if .Values.resourceNamePrefix -}}
     {{ include "common.tplvalues.render" ( dict "value" .Values.resourceNamePrefix "context" .) | trunc 63 | trimSuffix "-" }}
   {{- else -}}
@@ -21,7 +20,7 @@
 {{- end -}}
 
 # namespace
-{{- define "logan.namespace" -}}
+{{- define "mgmt-gateway.namespace" -}}
   {{- if .Values.namespace -}}
     {{ include "common.tplvalues.render" ( dict "value" .Values.namespace "context" .) }}
   {{- else -}}
@@ -30,24 +29,20 @@
 {{- end -}}
 
 #serviceAccount
-{{- define "logan.serviceAccount" -}}
+{{- define "mgmt-gateway.serviceAccount" -}}
   {{ include "common.tplvalues.render" ( dict "value" .Values.serviceAccount "context" .) }}
 {{- end -}}
 
-#kubernetesClusterId
-{{- define "logan.kubernetesClusterId" -}}
-  {{- if .Values.kubernetesClusterID -}}
-    {{ include "common.tplvalues.render" ( dict "value" .Values.kubernetesClusterID "context" .) }}
+#kubernetesClusterName
+{{- define "mgmt-gateway.kubernetesClusterName" -}}
+  {{- if .Values.kubernetesCluster.name -}}
+    {{ include "common.tplvalues.render" ( dict "value" .Values.kubernetesCluster.name "context" .) }}
   {{- else -}}
     {{- "UNDEFINED" -}}
   {{- end -}}
+{{- end -}}
+#mgmtgateway name
+{{- define "mgmt-gateway.gatewayFullname" -}}
+{{- .Release.Name | printf "%s-gateway" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
-#kubernetesClusterName
-{{- define "logan.kubernetesClusterName" -}}
-  {{- if .Values.kubernetesClusterName -}}
-    {{ include "common.tplvalues.render" ( dict "value" .Values.kubernetesClusterName "context" .) }}
-  {{- else -}}
-    {{- "UNDEFINED" -}}
-  {{- end -}}
-{{- end -}}
