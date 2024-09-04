@@ -410,6 +410,22 @@ entries:
   oci-onm-mgmt-agent:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2024-09-04T17:36:44.042914718Z"
+    dependencies:
+    - condition: oci-onm-common.enabled
+      name: oci-onm-common
+      repository: file://../common
+      version: 3.1.0
+    description: A Helm chart for collecting Kubernetes Metrics using OCI Management
+      Agent into OCI Monitoring.
+    digest: f21f176380188f7f91c9b9acbdd916fce9b8a1f83711f567f5ca9473d56588eb
+    name: oci-onm-mgmt-agent
+    type: application
+    urls:
+    - https://github.com/vijayvikoracle/oci-kubernetes-gateway/releases/download/oci-onm-mgmt-agent-3.0.3/oci-onm-mgmt-agent-3.0.3.tgz
+    version: 3.0.3
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2023-07-19T10:59:41.328684719Z"
     dependencies:
     - condition: oci-onm-common.enabled
@@ -424,4 +440,21 @@ entries:
     urls:
     - https://github.com/oracle-quickstart/oci-kubernetes-monitoring/releases/download/oci-onm-mgmt-agent-3.0.1/oci-onm-mgmt-agent-3.0.1.tgz
     version: 3.0.1
-generated: "2024-07-08T19:04:59.97416+05:30"
+  oci-onm-mgmt-gateway:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2024-09-04T17:36:44.308890667Z"
+    dependencies:
+    - condition: oci-onm-common.enabled
+      name: oci-onm-common
+      repository: file://../common
+      version: 3.1.0
+    description: A Helm chart for collecting Kubernetes Metrics using OCI Management
+      Agent into OCI Monitoring.
+    digest: bade14f581fec77e56671bf0aac47e8553796ccb2513202e2286f2457e2b01dd
+    name: oci-onm-mgmt-gateway
+    type: application
+    urls:
+    - https://github.com/vijayvikoracle/oci-kubernetes-gateway/releases/download/oci-onm-mgmt-gateway-3.0.3/oci-onm-mgmt-gateway-3.0.3.tgz
+    version: 3.0.3
+generated: "2024-09-04T17:36:44.308944758Z"
