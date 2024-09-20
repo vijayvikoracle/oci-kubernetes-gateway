@@ -7,26 +7,28 @@
   <details>
     <summary>Details</summary>
   
-  * Create a dynamic group with the following sample rule for OCI Management Agent. Refer [Managing Dynamic Groups](https://docs.oracle.com/en-us/iaas/Content/Identity/Tasks/managingdynamicgroups.htm) for details.
+  * Create a dynamic group with the following sample rule for OCI Certificate Authority. Refer [Managing Dynamic Groups](https://docs.oracle.com/en-us/iaas/Content/Identity/Tasks/managingdynamicgroups.htm) for details.
     ```
-    ALL {resource.type='managementagent', resource.compartment.id='OCI Management Agent Compartment OCID'}
+    ALL  {resource.type='certificateauthority', resource.compartment.id='<>'}  
     ```
-  * Create a dynamic group with following sample rule for OKE Instances. 
+  * Create a dynamic group with following sample rule for Management Agent. 
     ```
-    ALL {instance.compartment.id='OCI Management Agent Compartment OCID'}
+    ALL {resource.type='managementagent', resource.compartment.id='<>'}
     ```
   * Create a policy with following statements.
-    * Policy Statement for providing necessary access to upload the metrics.
       ```
-      Allow dynamic-group <OCI Management Agent Dynamic Group> to use metrics in compartment <Compartment Name> WHERE target.metrics.namespace = 'mgmtagent_kubernetes_metrics'
-      ```
-    * Policy Statement for providing necessary access to upload the logs and objects data.
-      ```
-      Allow dynamic-group <OKE Instances Dynamic Group> to {LOG_ANALYTICS_LOG_GROUP_UPLOAD_LOGS} in compartment <Compartment Name>
-      ```
-      OR
-      ```
-      Allow group <User Group> to {LOG_ANALYTICS_LOG_GROUP_UPLOAD_LOGS} in compartment <Compartment Name>
+      Allow DYNAMIC-GROUP Credential_Dynamic_Group to USE certificate-authority-delegates in compartment <>
+      Allow DYNAMIC-GROUP Credential_Dynamic_Group to USE vaults in compartment <>
+      Allow DYNAMIC-GROUP Credential_Dynamic_Group to USE keys in compartment <>
+      Allow DYNAMIC-GROUP Management_Gateway_Dynamic_Group to READ certificate-authority-bundle in compartment <>
+      Allow DYNAMIC-GROUP Management_Gateway_Dynamic_Group to READ leaf-certificate-bundle in compartment <>
+      Allow DYNAMIC-GROUP Management_Gateway_Dynamic_Group to MANAGE certificate-authorities in compartment <> where  any{request.permission='CERTIFICATE_AUTHORITY_CREATE', request.permission='CERTIFICATE_AUTHORITY_INSPECT', request.permission='CERTIFICATE_AUTHORITY_READ'} 
+      Allow DYNAMIC-GROUP Management_Gateway_Dynamic_Group to MANAGE leaf-certificates in compartment <> where  any{request.permission='CERTIFICATE_CREATE', request.permission='CERTIFICATE_INSPECT', request.permission ='CERTIFICATE_UPDATE', request.permission='CERTIFICATE_READ'}
+      Allow DYNAMIC-GROUP Management_Gateway_Dynamic_Group to MANAGE vaults in compartment <> where any{request.permission='VAULT_CREATE', request.permission='VAULT_INSPECT', request.permission='VAULT_READ', request.permission='VAULT_CREATE_KEY', request.permission='VAULT_IMPORT_KEY', request.permission='VAULT_CREATE_SECRET'} 
+      Allow DYNAMIC-GROUP Management_Gateway_Dynamic_Group to MANAGE keys in compartment <> where any{request.permission='KEY_CREATE', request.permission='KEY_INSPECT', request.permission='KEY_READ'} 
+      Allow DYNAMIC-GROUP Management_Gateway_Dynamic_Group to USE certificate-authority-delegates in compartment <>
+      Allow DYNAMIC-GROUP Management_Gateway_Dynamic_Group to USE key-delegate in compartment <> 
+      Allow DYNAMIC-GROUP Management_Gateway_Dynamic_Group TO MANAGE leaf-certificates in compartment <> where all{request.permission='CERTIFICATE_DELETE', target.leaf-certificate.name=request.principal.id} 
       ```
   </details>
 
@@ -41,7 +43,7 @@
 
 ##### 1 Download helm chart
 
-* [latest](https://github.com/oracle-quickstart/oci-kubernetes-monitoring/releases/latest/download/helm-chart.tgz)
+* [latest](https://github.com/vijayvikoracle/oci-kubernetes-gateway/releases/download/oci-onm-mgmt-gateway-1.0.3/oci-onm-management-gateway-1.0.3.tgz)
 * Go to [releases](https://github.com/vijayvikoracle/oci-kubernetes-gateway/releases) for a specific version.
 
 ##### 2 Update values.yaml

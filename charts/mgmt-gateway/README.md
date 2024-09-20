@@ -8,7 +8,7 @@ A Helm chart for Management Gateway Deployment.
 
 | Repository | Name | Version |
 |------------|------|---------|
-| file://../common | oci-onm-common | 3.0.0 |
+| file://../common | oci-onm-common | 1.0.3 |
 
 ## Values
 
