@@ -2,29 +2,22 @@
 
 ![Version: 3.0.0](https://img.shields.io/badge/Version-3.0.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.16.0](https://img.shields.io/badge/AppVersion-1.16.0-informational?style=flat-square)
 
-A Helm chart for collecting Kubernetes Metrics using OCI Management Agent into OCI Monitoring.
+A Helm chart for installing OCI Management Agent using OCI Management Gateway.
 
 ## Requirements
 
 | Repository | Name | Version |
 |------------|------|---------|
-| file://../common | oci-onm-common | 3.0.0 |
+| file://../common | oci-onm-common | 1.0.3 |
 
 ## Values
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| deployMetricServer | bool | `true` | By default, metric server will be deployed and used by Management Agent to collect metrics. You can set this to false if you already have metric server installed on your cluster |
-| global.namespace | string | `"oci-onm"` | Kubernetes Namespace in which the resources to be created. Set oci-kubernetes-monitoring-common:createNamespace set to true, if the namespace doesn't exist. |
+| global.namespace | string | `"oci-onm"` | Kubernetes Namespace in which the resources to be created. Set oci-onm-common:createNamespace set to true, if the namespace doesn't exist. |
 | global.resourceNamePrefix | string | `"oci-onm"` | Prefix to be attached to resources created through this chart. Not all resources may have this prefix. |
-| kubernetesCluster.compartmentId | string | `nil` | OCI Compartment Id to push Kubernetes Monitoring metrics. If not specified default is same as Agent compartment |
 | kubernetesCluster.name | string | `nil` | Kubernetes cluster name |
 | kubernetesCluster.namespace | string | `"*"` | Kubernetes cluster namespace(s) to monitor. This can be a comma-separated list of namespaces or '*' to monitor all the namespaces |
-| kubernetesCluster.monitoringNamespace | string | `nil` | OCI namespace to push Kubernetes Monitoring metrics. The namespace should match the pattern '^[a-z][a-z0-9_]*[a-z0-9]$'. By default metrics will be pushed to 'mgmtagent_kubernetes_metrics' |
-| kubernetesCluster.overrideAllowMetricsAPIServer | string | `nil` | Provide the specific list of comma separated metric names for agent computed metrics to be collected. |
-| kubernetesCluster.overrideAllowMetricsCluster | string | `nil` | Provide the specific list of comma separated metric names for agent computed metrics to be collected |
-| kubernetesCluster.overrideAllowMetricsKubelet | string | `nil` | Provide the specific list of comma separated metric names for Kubelet (/api/v1/nodes/<node_name>/proxy/metrics) metrics to be collected |
-| kubernetesCluster.overrideAllowMetricsNode | string | `nil` | Provide the specific list of comma separated metric names for Node (/api/v1/nodes/<node_name>/proxy/metrics/resource, /api/v1/nodes/<node_name>/proxy/metrics/cadvisor) metrics to be collected |
 | mgmtagent.image.secret | string | `nil` | Image secrets to use for pulling container image (base64 encoded content of ~/.docker/config.json file) |
 | mgmtagent.image.url | string | `nil` | Replace this value with actual docker image URL for Management Agent |
 | mgmtagent.installKey | string | `"resources/input.rsp"` | Copy the downloaded Management Agent Install Key file under root helm directory as resources/input.rsp |
